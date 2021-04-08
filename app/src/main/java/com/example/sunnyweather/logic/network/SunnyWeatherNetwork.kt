@@ -11,11 +11,19 @@ import kotlin.coroutines.suspendCoroutine
 
 /**
  * 统一的网络数据源访问入口
+ * encapsulate the api interface
  */
 object SunnyWeatherNetwork {
     //返回retrofit构建器实例,动态代理对象
     private val placeService = ServiceCreator.create(PlaceService::class.java)
 
+    private val weatherService = ServiceCreator.create(WeatherService::class.java)
+
+    suspend fun getDailyWeather(lng: String, lat: String) =
+        weatherService.getDailyWeather(lng, lat).await()
+
+    suspend fun getRealtimeWeather(lng: String, lat: String) =
+        weatherService.getRealtimeWeather(lng, lat).await()
 
     /**
      * 协程，挂起 用placeService发起搜索城市数据网络请求
